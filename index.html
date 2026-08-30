@@ -300,11 +300,31 @@ function drawBadge(){
   ctx.font=`italic 700 ${fs}px Georgia,"Times New Roman",serif`;
   ctx.fillText(txt,badgeX,y+2);
 }
+function todayStr(){
+  const d=new Date();
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
 function drawFooter(){
   if(!logoReady) return;
-  const maxH=FOOTER*0.55, maxW=SIZE*0.45; let lw=logoImg.width, lh=logoImg.height;
+  const cy=SIZE+FOOTER/2;
+  // logo
+  const maxH=FOOTER*0.55, maxW=SIZE*0.38; let lw=logoImg.width, lh=logoImg.height;
   const s=Math.min(maxH/lh,maxW/lw); lw*=s; lh*=s;
-  ctx.drawImage(logoImg,(SIZE-lw)/2,SIZE+(FOOTER-lh)/2,lw,lh);
+  // data (mesma fonte serifada itálica do selo, em vermelho)
+  const dateTxt=todayStr();
+  const dfs=54;
+  ctx.font=`italic 700 ${dfs}px Georgia,"Times New Roman",serif`;
+  const dw=ctx.measureText(dateTxt).width;
+  const spacing=36;
+  const totalW=lw+spacing+dw;
+  const startX=(SIZE-totalW)/2;
+  // desenha logo à esquerda
+  ctx.drawImage(logoImg,startX,cy-lh/2,lw,lh);
+  // desenha data à direita
+  ctx.fillStyle='#e2062c';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.font=`italic 700 ${dfs}px Georgia,"Times New Roman",serif`;
+  ctx.fillText(dateTxt, startX+lw+spacing, cy+2);
 }
 
 /* ====== arrasto do selo ====== */
